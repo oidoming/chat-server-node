@@ -1,4 +1,3 @@
-//const mongoose = require('mongoose');
 const {Sequelize, DataTypes} = require('sequelize')
 const UsuarioModel = require('../models/usuario')
 const MensajeModel = require('../models/mensaje')
@@ -33,40 +32,12 @@ sequelize.sync({ force: true })
     console.log(`Database & tables created!`)
 });
 */
-//Mensaje.sync({ force: true });
+//Uusario.sync({ force: true });
 //console.log("The table for the User model was just (re)created!");
 
 //Mensaje.sync({ force: true });
 //console.log("The table for the Mensaje model was just (re)created!");
 
-/*
-try {
-    sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-}*/
-
-/*
-const dbConnection = async() => {
-
-    try {
-        await mongoose.connect( process.env.DB_CNN, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useCreateIndex: true
-        });
-
-        console.log('DB Online');
-        
-
-    } catch (error) {
-        console.log(error);
-        throw new Error('Error en la base de datos - Hable con el admin');
-    }
-
-}
-*/
 module.exports = {
     Usuario,
     Mensaje,

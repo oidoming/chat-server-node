@@ -7,16 +7,9 @@ const getUsuarios = async ( req, res = response ) => {
 
     const usuarios = await Usuario.findAll({
         order : [
-            ['online', 'ASC'],
+            ['online', 'DESC']
         ],
     })
-    /*
-    const usuarios = await Usuario
-        .find({ _id: { $ne: req.uid } })
-        .sort('-online')
-        .skip(desde)
-        .limit(20)
-    */
     
     res.json({
         ok: true,
