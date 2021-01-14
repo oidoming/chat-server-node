@@ -1,18 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('mensajes', {
+    return sequelize.define('messages', {
         id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-        de: {
+        from: {
             type: DataTypes.INTEGER, references: {
                 model: 'users',
                 key: 'uid'
             }
         },
-        para: {
+        to: {
             type: DataTypes.INTEGER, references: {
                 model: 'users',
                 key: 'uid'
             }
         },
-        mensaje: DataTypes.STRING,
+        message: DataTypes.STRING,
     }, {timestamps: false});
 }

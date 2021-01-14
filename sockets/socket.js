@@ -1,40 +1,25 @@
 const { io } = require('../index');
-const { comprobarJWT } = require('../helpers/jwt');
-const { usuarioConectado, usuarioDesconectado, grabarMensaje } = require('../controllers/socket');
+const { socketValidateJWT } = require('../middlewares/jwt');
+const { setConnectedUser, setDisconnectedUser, saveMessage } = require('../handlers/socket');
 
-// Mensajes de Sockets
+
 io.on('connection', (client) =>  {
-    const [ valido, uid ] = comprobarJWT( client.handshake.headers['x-token'] )
+    const [ valid, uid ] = socketValidateJWT( client.handshake.headers['x-token'] )
 
-    // Verificar autenticación
-    if ( !valido ) { return client.disconnect(); }
+    if ( !valid ) { return client.disconnect(); } //validate auth
     
-    // Cliente autenticado
-    usuarioConectado( uid );
+    setConnectedUser( uid );
 
-    // Ingresar al usuario a una sala en particular
-    // sala global, client.id, 5f298534ad4169714548b785
+    // join socket server
     client.join( uid );
 
-    // Escuchar del cliente el mensaje-personal
-    client.on('mensaje-personal', async( payload ) => {
-        // TODO: Grabar mensaje
-        await grabarMensaje( payload );
-        io.to( payload.para ).emit('mensaje-personal', payload );
-    })
-    
+    client.on('private-message', async( payload ) => {
+        await saveMessage( payload );
+        io.to( payload.to ).emit('private-message', payload );
+    })  
 
     client.on('disconnect', () => {
-        usuarioDesconectado(uid);
+        setDisconnectedUser(uid);
     });
-
-    
-
-    
-    // client.on('mensaje', ( payload ) => {
-    //     console.log('Mensaje', payload);
-    //     io.emit( 'mensaje', { admin: 'Nuevo mensaje' } );
-    // });
-
 
 });

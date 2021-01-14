@@ -1,44 +1,26 @@
 const express = require('express');
 const path = require('path');
-require('dotenv').config();
-
-// DB Config
-require('./database/config').sequelize;
+require('./database/db').sequelize; //db 
 
 
-// App de Express
 const app = express();
+app.use( express.json() ); // body parser
 
-// Lectura y parseo del Body
-app.use( express.json() );
-
-
-// Node Server
 const server = require('http').createServer(app);
 module.exports.io = require('socket.io')(server);
 require('./sockets/socket');
 
-
-
-
-// Path público
-const publicPath = path.resolve( __dirname, 'public' );
-app.use( express.static( publicPath ) );
-
-
-
-// Mis Rutas
 app.use( '/api/login', require('./routes/auth') );
-app.use( '/api/usuarios', require('./routes/usuarios') );
-app.use( '/api/mensajes', require('./routes/mensajes') );
+app.use( '/api/users', require('./routes/users') );
+app.use( '/api/messages', require('./routes/messages') );
 
+const port = 3000
 
-
-server.listen( process.env.PORT, ( err ) => {
+server.listen( port, ( err ) => {
 
     if ( err ) throw new Error(err);
 
-    console.log('Servidor corriendo en puerto', process.env.PORT );
+    console.log('Server running on port', port );
 
 });
 
